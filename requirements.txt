@@ -1,0 +1,29 @@
+# Hugging Face Ecosystem
+transformers==4.35.2
+datasets==2.15.0
+
+# PyTorch
+torch>=1.10.0
+
+# NER Specific Libraries
+pytorch-crf==0.7.2
+seqeval==1.2.2
+
+# Experiment Tracking
+wandb==0.16.1
+
+# Standard Data Science & Utility Libraries
+numpy==1.26.2
+pandas==2.1.3
+scikit-learn==1.3.2
+tqdm==4.66.1
+
+# Chinese NLP
+jieba>=0.42.1
+
+# Visualization
+matplotlib>=3.5.0
+seaborn>=0.11.2
+
+# Embedding Loader
+gensim>=4.0.0

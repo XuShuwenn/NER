@@ -1,0 +1,22 @@
+2025-07-18 07:27:47,440 - INFO - Starting training with args: {'model_type': 'bert', 'dataset': 'conll2003', 'lang': 'en', 'model_name_or_path': 'bert-base-cased', 'embedding_path': None, 'num_epochs': 20, 'batch_size': 128, 'max_len': 128, 'learning_rate': 4e-05, 'weight_decay': 0.01, 'embedding_dim': 100, 'hidden_dim': 256, 'log_dir': './logs', 'processed_data_dir': './processed_data'}
+2025-07-18 07:27:47,440 - INFO - Using device: cuda
+2025-07-18 07:45:01,042 - INFO - Starting training with args: {'model_type': 'bert', 'dataset': 'conll2003', 'lang': 'en', 'model_name_or_path': 'bert-base-cased', 'embedding_path': None, 'num_epochs': 20, 'batch_size': 128, 'max_len': 128, 'learning_rate': 4e-05, 'weight_decay': 0.01, 'embedding_dim': 100, 'hidden_dim': 256, 'log_dir': './logs', 'processed_data_dir': './processed_data'}
+2025-07-18 07:45:01,042 - INFO - Using device: cuda
+2025-07-18 07:47:27,013 - INFO - Step 100: Loss = 0.4772
+2025-07-18 07:49:34,590 - INFO - Starting training with args: {'model_type': 'bert', 'dataset': 'conll2003', 'lang': 'en', 'model_name_or_path': 'bert-base-cased', 'embedding_path': None, 'num_epochs': 20, 'batch_size': 128, 'max_len': 128, 'learning_rate': 4e-05, 'weight_decay': 0.01, 'embedding_dim': 100, 'hidden_dim': 256, 'log_dir': './logs', 'processed_data_dir': './processed_data'}
+2025-07-18 07:49:34,590 - INFO - Using device: cuda
+2025-07-18 07:51:56,563 - INFO - Step 100: Loss = 0.4724
+2025-07-18 08:00:52,966 - INFO - Starting training with args: {'model_type': 'bert', 'dataset': 'conll2003', 'lang': 'en', 'model_name_or_path': 'bert-base-cased', 'embedding_path': None, 'num_epochs': 20, 'batch_size': 128, 'max_len': 128, 'learning_rate': 4e-05, 'weight_decay': 0.01, 'embedding_dim': 100, 'hidden_dim': 256, 'log_dir': './logs', 'processed_data_dir': './processed_data'}
+2025-07-18 08:00:52,966 - INFO - Using device: cuda
+2025-07-18 08:03:15,986 - INFO - Step 100: Loss = 0.4755
+2025-07-18 08:12:15,660 - INFO - Starting training with args: {'model_type': 'bert', 'dataset': 'conll2003', 'lang': 'en', 'model_name_or_path': 'bert-base-cased', 'embedding_path': None, 'num_epochs': 20, 'batch_size': 128, 'max_len': 128, 'learning_rate': 4e-05, 'weight_decay': 0.01, 'embedding_dim': 100, 'hidden_dim': 256, 'log_dir': './logs', 'processed_data_dir': './processed_data'}
+2025-07-18 08:12:15,660 - INFO - Using device: cuda
+2025-07-18 08:14:39,602 - INFO - Step 100: Loss = 0.4438
+2025-07-18 08:15:11,279 - INFO - Epoch 0: Train Loss=0.0198, Train Acc=0.6015, Val Loss=0.0106, Val Acc=0.6376, Eval F1=0.6927, Precision=0.7469, Recall=0.6459
+2025-07-18 08:17:11,861 - INFO - Step 200: Loss = 0.1793
+2025-07-18 08:17:57,010 - INFO - Epoch 1: Train Loss=0.0080, Train Acc=0.6406, Val Loss=0.0065, Val Acc=0.6548, Eval F1=0.7756, Precision=0.8030, Recall=0.7500
+2025-07-18 08:19:44,064 - INFO - Step 300: Loss = 0.1043
+2025-07-18 08:20:42,640 - INFO - Epoch 2: Train Loss=0.0048, Train Acc=0.6532, Val Loss=0.0053, Val Acc=0.6609, Eval F1=0.8123, Precision=0.8642, Recall=0.7663
+2025-07-18 08:22:16,293 - INFO - Step 400: Loss = 0.0782
+2025-07-18 08:23:28,610 - INFO - Epoch 3: Train Loss=0.0036, Train Acc=0.6588, Val Loss=0.0051, Val Acc=0.6622, Eval F1=0.8182, Precision=0.8267, Recall=0.8100
+2025-07-18 08:24:48,957 - INFO - Step 500: Loss = 0.0601

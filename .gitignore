@@ -1,8 +1,7 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.pyc
-*
-.pyo
+# *.pyo
 *.pyd
 .Python
 
@@ -72,7 +71,6 @@ wandb/
 *.swp
 
 # Model Checkpoints
-models/
 *.pt
 *.pth
 checkpoints/
