@@ -25,7 +25,7 @@ for model in "${models[@]}"; do
         --dataset "$dataset" \
         --lang $lang \
         --model_name_or_path bert-base-cased \
-        --num_epochs 20 \
+        --num_epochs 10 \
         --batch_size 128 \
         --max_len 128 \
         --learning_rate 4e-5 \
