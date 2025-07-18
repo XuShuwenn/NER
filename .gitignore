@@ -80,3 +80,5 @@ checkpoints/
 
 # 日志文件
 logs/
+#数据
+processed_data/

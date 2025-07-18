@@ -22,3 +22,7 @@
 2025-07-18 08:24:48,957 - INFO - Step 500: Loss = 0.0601
 2025-07-18 08:26:14,792 - INFO - Epoch 4: Train Loss=0.0028, Train Acc=0.6626, Val Loss=0.0049, Val Acc=0.6638, Eval F1=0.8327, Precision=0.8433, Recall=0.8223
 2025-07-18 08:27:21,565 - INFO - Step 600: Loss = 0.0477
+2025-07-18 08:29:00,624 - INFO - Epoch 5: Train Loss=0.0022, Train Acc=0.6652, Val Loss=0.0047, Val Acc=0.6655, Eval F1=0.8380, Precision=0.8536, Recall=0.8229
+2025-07-18 08:29:54,059 - INFO - Step 700: Loss = 0.0402
+2025-07-18 08:31:46,629 - INFO - Epoch 6: Train Loss=0.0019, Train Acc=0.6670, Val Loss=0.0048, Val Acc=0.6653, Eval F1=0.8407, Precision=0.8450, Recall=0.8364
+2025-07-18 08:32:26,432 - INFO - Step 800: Loss = 0.0364
