@@ -77,3 +77,6 @@ checkpoints/
 
 # Other
 .DS_Store
+
+# 日志文件
+logs/
