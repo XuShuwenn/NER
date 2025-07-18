@@ -82,3 +82,4 @@ checkpoints/
 logs/
 #数据
 processed_data/
+*.log
