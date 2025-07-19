@@ -11,14 +11,16 @@ SUPPORTED_LANGUAGES = {
         "tokenizer": "space",  # 空格分词
         "bert_model": "bert-base-cased",
         "datasets": ["conll2003", "wikiann", "conll2012_ontonotesv5"],
-        "wikiann_config": "english_v4"  # WikiAnn数据集配置
+        "wikiann_config": "english_v4",  # WikiAnn数据集配置
+        "conll2012_config": "english_v4"  # conll2012_ontonotesv5数据集配置
     },
     "zh": {
         "name": "Chinese",
         "tokenizer": "jieba",  # jieba分词
-        "bert_model": "bert-base-cased",  # 使用通用BERT模型
+        "bert_model": "bert-base-chinese",  # 使用专门的中文BERT模型
         "datasets": ["wikiann", "conll2012_ontonotesv5"],
-        "wikiann_config": "chinese_v4"  # WikiAnn数据集配置
+        "wikiann_config": "chinese_v4",  # WikiAnn数据集配置
+        "conll2012_config": "chinese_v4"  # conll2012_ontonotesv5数据集配置
     }
 }
 
@@ -125,7 +127,8 @@ def get_dataset_language_config(dataset: str, lang: str) -> Dict:
         "conll2012_ontonotesv5": {
             "lang": None,  # conll2012_ontonotesv5不需要语言参数
             "text_field": "words",
-            "label_field": "named_entities"
+            "label_field": "named_entities",
+            "config": "english_v4"  # 默认配置
         }
     }
     
@@ -133,8 +136,6 @@ def get_dataset_language_config(dataset: str, lang: str) -> Dict:
         raise ValueError(f"Unknown dataset: {dataset}")
     
     return dataset_configs[dataset]
-
-
 
 def print_language_support_info():
     """

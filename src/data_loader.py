@@ -15,8 +15,7 @@ from src.utils.lang_utils import (
     get_language_config, 
     validate_language_dataset_combo,
     get_dataset_language_config,
-    get_bert_model_for_language,
-    preprocess_text_for_language
+    get_bert_model_for_language
 )
 
 
@@ -150,8 +149,11 @@ def load_and_preprocess_data(
         wikiann_config = lang_config.get("wikiann_config", lang)
         dataset = load_dataset(dataset_name, wikiann_config)
     elif dataset_name == "conll2012_ontonotesv5":
-        # conll2012_ontonotesv5 不需要语言参数，直接加载
-        dataset = load_dataset(dataset_name)
+        # conll2012_ontonotesv5 需要指定配置名称
+        lang_config = get_language_config(lang)
+        config_name = lang_config.get("conll2012_config", "english_v4")
+        print(f"Loading conll2012_ontonotesv5 with config: {config_name}")
+        dataset = load_dataset(dataset_name, config_name)
     else:
         dataset = load_dataset(dataset_name, lang)  # lang must be a valid config, not None
     # 如果加载的数据集是IterableDatasetDict，则抛出错误

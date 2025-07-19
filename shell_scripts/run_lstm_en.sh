@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export CUDA_VISIBLE_DEVICES=0
+export CUDA_VISIBLE_DEVICES=1
 export HF_HOME=$HOME/.cache/huggingface
 export HF_DATASETS_CACHE=$HOME/.cache/huggingface/datasets
 export HF_MODULES_CACHE=$HOME/.cache/huggingface/modules

@@ -27,7 +27,7 @@ echo "开始BERT中文NER训练..."
 echo ""
 echo "1. 训练中文wikiann数据集 (BERT模型)"
 echo "数据集: wikiann (中文)"
-echo "模型: BERT (bert-base-cased)"
+echo "模型: BERT (bert-base-chinese)"
 echo "分词: BERT中文分词器"
 echo "配置: chinese_v4"
 
@@ -35,31 +35,32 @@ PYTHONPATH=. python -W ignore::FutureWarning scripts/train.py \
   --model_type bert \
   --dataset wikiann \
   --lang zh \
-  --model_name_or_path bert-base-cased \
+  --model_name_or_path bert-base-chinese \
   --num_epochs 10 \
-  --batch_size 32 \
+  --batch_size 128 \
   --max_len 128 \
-  --learning_rate 5e-5 \
+  --learning_rate 1e-4 \
   --weight_decay 0.01 \
   --log_dir ./logs/bert_zh \
   --processed_data_dir ./processed_data
 
-# 2. 中文conll2012_ontonotesv5数据集 - BERT模型
+# 2. 中文conll2012_ontonotesv5数据集 - BERT模型 (使用中文BERT)
 echo ""
 echo "2. 训练中文conll2012_ontonotesv5数据集 (BERT模型)"
 echo "数据集: conll2012_ontonotesv5 (中文)"
-echo "模型: BERT (bert-base-cased)"
+echo "模型: BERT (bert-base-chinese)"
 echo "分词: BERT中文分词器"
+echo "配置: chinese_v4"
 
 PYTHONPATH=. python -W ignore::FutureWarning scripts/train.py \
   --model_type bert \
   --dataset conll2012_ontonotesv5 \
   --lang zh \
-  --model_name_or_path bert-base-cased \
+  --model_name_or_path bert-base-chinese \
   --num_epochs 10 \
-  --batch_size 32 \
+  --batch_size 128 \
   --max_len 128 \
-  --learning_rate 5e-5 \
+  --learning_rate 1e-4 \
   --weight_decay 0.01 \
   --log_dir ./logs/bert_zh \
   --processed_data_dir ./processed_data
@@ -70,5 +71,5 @@ echo "日志文件保存在 ./logs/bert_zh 目录"
 echo "处理后的数据缓存保存在 ./processed_data 目录"
 echo ""
 echo "训练结果文件："
-echo "- BERT + wikiann (中文): ./logs/bert_zh/bert_wikiann_zh_bert-base-cased.log"
-echo "- BERT + conll2012_ontonotesv5 (中文): ./logs/bert_zh/bert_conll2012_ontonotesv5_bert-base-cased.log" 
+echo "- BERT + wikiann (中文): ./logs/bert_zh/bert_wikiann_zh_bert-base-chinese.log"
+echo "- BERT + conll2012_ontonotesv5 (中文): ./logs/bert_zh/bert_conll2012_ontonotesv5_bert-base-chinese.log" 

@@ -193,8 +193,11 @@ def main():
             
             # Log every 100 steps 每100步记录一次avg_loss
             if global_step % 100 == 0:
-                avg_loss = sum(epoch_losses[-100:]) / len(epoch_losses[-100:])
-                logger.info(f"Step {global_step}: Loss = {avg_loss:.4f}")
+                if len(epoch_losses) > 0:
+                    avg_loss = sum(epoch_losses[-100:]) / len(epoch_losses[-100:])
+                    logger.info(f"Step {global_step}: Loss = {avg_loss:.4f}")
+                else:
+                    logger.info(f"Step {global_step}: No losses recorded yet")
 
             # 确保loss为标量
             if isinstance(loss, torch.Tensor):
