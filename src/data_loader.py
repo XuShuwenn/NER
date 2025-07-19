@@ -11,6 +11,14 @@ from datasets import IterableDataset, IterableDatasetDict
 from transformers import AutoTokenizer
 import jieba
 
+from src.utils.lang_utils import (
+    get_language_config, 
+    validate_language_dataset_combo,
+    get_dataset_language_config,
+    get_bert_model_for_language,
+    preprocess_text_for_language
+)
+
 
 # 分词器
 def tokenize(sentence: str, lang: str) -> List[str]:
@@ -126,8 +134,23 @@ def load_and_preprocess_data(
         with open(cache_path, "rb") as f:
             return pickle.load(f)
 
+    # 验证语言和数据集组合
+    if not validate_language_dataset_combo(lang, dataset_name):
+        raise ValueError(f"Dataset {dataset_name} is not supported for language {lang}")
+    
+    # 获取数据集配置
+    dataset_config = get_dataset_language_config(dataset_name, lang)
+    
     # 加载原始数据集
     if dataset_name == "conll2003":
+        dataset = load_dataset(dataset_name)
+    elif dataset_name == "wikiann":
+        # 获取WikiAnn数据集的语言配置
+        lang_config = get_language_config(lang)
+        wikiann_config = lang_config.get("wikiann_config", lang)
+        dataset = load_dataset(dataset_name, wikiann_config)
+    elif dataset_name == "conll2012_ontonotesv5":
+        # conll2012_ontonotesv5 不需要语言参数，直接加载
         dataset = load_dataset(dataset_name)
     else:
         dataset = load_dataset(dataset_name, lang)  # lang must be a valid config, not None
@@ -233,7 +256,10 @@ def load_and_preprocess_data(
 
     # 处理BERT和LSTM不同
     if model_type == "bert":
-        # 对于BERT，使用BERT分词器
+        # 对于BERT，根据语言选择合适的模型
+        if model_name_or_path == "bert-base-cased" and lang != "en":
+            # 如果使用默认英文模型但语言不是英文，自动选择合适的模型
+            model_name_or_path = get_bert_model_for_language(lang)
         tokenizer = AutoTokenizer.from_pretrained(model_name_or_path)
         vocab = None  # BERT uses its own vocabulary
     else:

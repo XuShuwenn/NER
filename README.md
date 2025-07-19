@@ -1,6 +1,6 @@
 # NER (命名实体识别)项目
 
-本项目支持基于BERT和LSTM-CRF的多语言命名实体识别（NER）任务，支持常见数据集（如conll2003、conll2012_ontonotesv5、wikiann），并支持多GPU并行训练、日志自动管理和大文件自动忽略。
+本项目支持基于BERT和LSTM-CRF的多语言命名实体识别（NER）任务，支持多种语言（中文、英文、德文、西班牙文等）和常见数据集（如conll2003、conll2012_ontonotesv5、wikiann），并支持单GPU训练、日志自动管理和大文件自动忽略。
 
 ---
 
@@ -14,8 +14,7 @@ NER/
 ├── .gitignore
 ├── scripts/
 │   ├── train.py
-│   ├── plot_logs.py
-│   └── preprocess.py
+│   └── plot_logs.py
 ├── shell_scripts/
 │   └── run_ner.sh
 ├── src/
@@ -29,9 +28,17 @@ NER/
 │       ├── __init__.py
 │       ├── arg_utils.py
 │       └── logging_utils.py
-├── data/                
 ├── processed_data/      
 ├── logs/               
+│   ├── bert_en/        
+│   ├── bert_zh/        
+│   ├── lstm_en/        
+│   └── lstm_zh/        
+├── log_figures/       
+│   ├── bert_en/        
+│   ├── bert_zh/        
+│   ├── lstm_en/        
+│   └── lstm_zh/        
 ├── wandb/               
 ├── .conda/              
 ├── .vscode/            
@@ -40,10 +47,22 @@ NER/
 
 ---
 
-## 支持的数据集
-- `conll2003`
-- `conll2012_ontonotesv5`
-- `wikiann`
+## 支持的语言和数据集
+
+### 支持的语言
+- **中文 (zh)**: 使用jieba分词，支持BERT模型
+- **英文 (en)**: 空格分词，支持BERT模型
+
+### 支持的数据集
+- `conll2003` (英文) - 不需要语言参数
+- `conll2012_ontonotesv5` (多语言) - 不需要语言参数，但需要指定lang用于分词和模型选择
+- `wikiann` (多语言) - 需要指定语言配置
+
+### 语言和数据集组合
+查看所有支持的语言和数据集组合：
+```bash
+python scripts/train.py --show_languages
+```
 
 ## 支持的模型
 - `bert`（支持多语言BERT、bert-base-cased等）
@@ -68,13 +87,24 @@ pip install -r requirements.txt
 ### 1. 批量训练（推荐）
 
 ```bash
-bash shell_scripts/run_ner.sh
+# BERT英文训练
+bash shell_scripts/run_bert_en.sh
+
+# BERT中文训练
+bash shell_scripts/run_bert_zh.sh
+
+# LSTM英文训练
+bash shell_scripts/run_lstm_en.sh
+
+# LSTM中文训练
+bash shell_scripts/run_lstm_zh.sh
 ```
-- 自动遍历所有模型和数据集组合，支持多GPU（已在脚本开头设置`CUDA_VISIBLE_DEVICES`）。
-- 日志保存在`logs/`目录，已自动忽略。
+- 自动遍历所有模型和数据集组合，使用单GPU训练。
+- 日志按类别分别保存在`logs/bert_en/`、`logs/bert_zh/`、`logs/lstm_en/`、`logs/lstm_zh/`目录。
 
 ### 2. 单模型单数据集训练
 
+#### 英文训练示例
 ```bash
 python scripts/train.py \
   --model_type bert \
@@ -89,21 +119,45 @@ python scripts/train.py \
   --log_dir ./logs \
   --processed_data_dir ./processed_data
 ```
+
+#### 中文训练示例
+```bash
+python scripts/train.py \
+  --model_type lstm-crf \
+  --dataset wikiann \
+  --lang zh \
+  --num_epochs 30 \
+  --batch_size 256 \
+  --max_len 128 \
+  --learning_rate 0.001 \
+  --embedding_dim 100 \
+  --hidden_dim 256 \
+  --log_dir ./logs \
+  --processed_data_dir ./processed_data
+```
+
+
+
+### 3. 查看支持的语言和数据集
+```bash
+python scripts/train.py --show_languages
+```
+
 - 其它参数可参考`scripts/arg_utils.py`。
 
 ---
 
 ## 日志与大文件管理
-- `logs/`、`processed_data/`、`data/`、`wandb/`、模型权重等大文件已在`.gitignore`中自动忽略。
+- `logs/`、`processed_data/`、`wandb/`、模型权重等大文件已在`.gitignore`中自动忽略。
 - 不会被git提交，避免GitHub大文件报错。
 - 日志文件自动按模型+数据集命名，保存在`logs/`目录。
 
 ---
 
-## 多GPU训练
-- 已自动支持`torch.nn.DataParallel`，脚本会自动利用所有可见GPU。
-- 在`shell_scripts/run_ner.sh`开头设置`export CUDA_VISIBLE_DEVICES=0,1,2,3,4,6,7,8`，（可根据实际GPU调整）。
-- 训练时会自动打印`Using X GPUs for DataParallel!`
+## GPU训练
+- 使用单GPU进行训练，默认使用GPU 0。
+- 在shell脚本开头设置`export CUDA_VISIBLE_DEVICES=0`。
+- 支持CUDA和CPU训练，自动检测可用设备。
 
 ---
 

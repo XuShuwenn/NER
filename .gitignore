@@ -78,7 +78,6 @@ logs/
 
 # 数据目录
 processed_data/
-data/
 
 # 其它大文件
 *.pkl

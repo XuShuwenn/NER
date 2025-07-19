@@ -1,7 +1,8 @@
-import os
-import re
-import matplotlib.pyplot as plt
+import os 
+import re #正则表达式
+import matplotlib.pyplot as plt 
 
+# 日志目录和输出目录
 LOG_DIR = "logs"
 OUT_DIR = "log_figures"
 os.makedirs(OUT_DIR, exist_ok=True)
@@ -10,6 +11,7 @@ os.makedirs(OUT_DIR, exist_ok=True)
 pattern = re.compile(
     r"Epoch (\d+): Train Loss=([0-9.]+), Train Acc=([0-9.]+), Val Loss=([0-9.]+), Val Acc=([0-9.]+), Eval F1=([0-9.]+)"
 )
+
 # 解析日志文件
 def parse_log(log_path):
     epochs, train_loss, val_loss, f1, train_acc, val_acc = [], [], [], [], [], []

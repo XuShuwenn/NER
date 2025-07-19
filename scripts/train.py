@@ -44,15 +44,13 @@ def evaluate_epoch(model, dataloader, device, id2label, is_crf=False):
                 # 计算损失
                 loss = model(input_ids, labels=labels, mask=mask)
                 # 预测标签
-                outputs = model(input_ids, labels=None, mask=mask)
-                # 将预测标签转换为列表
-                predictions = outputs if isinstance(outputs, list) else outputs.tolist()
+                predictions = model(input_ids, labels=None, mask=mask)
             else:
                 outputs = model(input_ids=input_ids, attention_mask=mask, labels=labels)
                 loss = outputs.loss
                 predictions = outputs.logits.argmax(dim=-1).cpu().numpy().tolist()
-            # 确保loss为标量，兼容多卡DataParallel
-            if isinstance(loss, torch.Tensor) and loss.dim() > 0:
+            # 确保loss为标量
+            if isinstance(loss, torch.Tensor):
                 loss = loss.mean()
             total_loss += loss.item() * input_ids.size(0)
             true_labels = labels.cpu().numpy().tolist()
@@ -84,8 +82,14 @@ def main():
     args = get_train_args()
     # 获取训练参数（调用arg_utils.py中的get_train_args()函数，
     # 参数包括：模型类型、数据集、语言、模型名称或路径、嵌入路径、训练轮数、批量大小、最大序列长度、学习率、权重衰减、嵌入维度、隐藏维度、日志目录、处理后的数据目录）
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    run_name = f"{args.model_type}_{args.dataset}_{args.model_name_or_path.replace('/', '_')}"
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    # 生成包含语言信息的run_name
+    if args.dataset == "wikiann":
+        # 对于WikiAnn数据集，包含语言信息
+        run_name = f"{args.model_type}_{args.dataset}_{args.lang}_{args.model_name_or_path.replace('/', '_')}"
+    else:
+        # 对于其他数据集，保持原有逻辑
+        run_name = f"{args.model_type}_{args.dataset}_{args.model_name_or_path.replace('/', '_')}"
     
     # Setup logging
     logger = setup_logging(args.log_dir, run_name)
@@ -124,9 +128,6 @@ def main():
             num_labels=num_labels,
             embedding_matrix=embedding_matrix
         ).to(device)
-        if torch.cuda.device_count() > 1:
-            print(f"Using {torch.cuda.device_count()} GPUs for DataParallel!")
-            model = torch.nn.DataParallel(model)
         optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
         is_crf = True
     else:  # bert
@@ -141,9 +142,6 @@ def main():
             num_labels=len(label_names)
         )
         model = model.to(device)
-        if torch.cuda.device_count() > 1:
-            print(f"Using {torch.cuda.device_count()} GPUs for DataParallel!")
-            model = torch.nn.DataParallel(model)
         optimizer = AdamW(
             model.parameters(), 
             lr=args.learning_rate, 
@@ -172,8 +170,7 @@ def main():
             optimizer.zero_grad()
             if is_crf:
                 loss = model(input_ids, labels=labels, mask=mask)
-                outputs = model(input_ids, labels=None, mask=mask)
-                predictions = outputs if isinstance(outputs, list) else outputs.tolist()
+                predictions = model(input_ids, labels=None, mask=mask)
             else:
                 outputs = model(input_ids=input_ids, attention_mask=mask, labels=labels)
                 loss = outputs.loss
@@ -184,7 +181,7 @@ def main():
             if is_crf:
                 pred_labels = predictions
             else:
-                pred_labels = predictions.cpu().numpy()
+                pred_labels = predictions.cpu().numpy() if hasattr(predictions, 'cpu') else predictions
             mask_np = mask.cpu().numpy()
             for i in range(true_labels.shape[0]):
                 for t, p, m in zip(true_labels[i], pred_labels[i], mask_np[i]):
@@ -199,8 +196,8 @@ def main():
                 avg_loss = sum(epoch_losses[-100:]) / len(epoch_losses[-100:])
                 logger.info(f"Step {global_step}: Loss = {avg_loss:.4f}")
 
-            # 确保loss为标量，兼容多卡DataParallel
-            if isinstance(loss, torch.Tensor) and loss.dim() > 0:
+            # 确保loss为标量
+            if isinstance(loss, torch.Tensor):
                 loss = loss.mean()
             loss.backward()
             optimizer.step()
