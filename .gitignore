@@ -84,3 +84,5 @@ processed_data/
 *.npz
 *.h5
 .DS_Store
+
+*.tex

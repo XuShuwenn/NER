@@ -39,7 +39,7 @@ PYTHONPATH=. python -W ignore::FutureWarning scripts/train.py \
   --num_epochs 10 \
   --batch_size 128 \
   --max_len 128 \
-  --learning_rate 1e-4 \
+  --learning_rate 4e-5 \
   --weight_decay 0.01 \
   --log_dir ./logs/bert_zh \
   --processed_data_dir ./processed_data
@@ -60,7 +60,7 @@ PYTHONPATH=. python -W ignore::FutureWarning scripts/train.py \
   --num_epochs 10 \
   --batch_size 128 \
   --max_len 128 \
-  --learning_rate 1e-4 \
+  --learning_rate 4e-5 \
   --weight_decay 0.01 \
   --log_dir ./logs/bert_zh \
   --processed_data_dir ./processed_data

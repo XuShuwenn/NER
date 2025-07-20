@@ -41,18 +41,42 @@ def plot_metrics(log_file, epochs, train_loss, val_loss, f1, train_acc, val_acc)
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
-    out_path = os.path.join(OUT_DIR, os.path.basename(log_file) + ".png")
+    
+    # 创建对应的输出子目录
+    rel_path = os.path.relpath(log_file, LOG_DIR)
+    sub_dir = os.path.dirname(rel_path)
+    if sub_dir:
+        out_sub_dir = os.path.join(OUT_DIR, sub_dir)
+        os.makedirs(out_sub_dir, exist_ok=True)
+        out_path = os.path.join(out_sub_dir, os.path.basename(log_file) + ".png")
+    else:
+        out_path = os.path.join(OUT_DIR, os.path.basename(log_file) + ".png")
+    
     plt.savefig(out_path)
     plt.close()
     print(f"Saved plot to {out_path}")
 
+# 递归查找所有日志文件
+def find_log_files(directory):
+    log_files = []
+    for root, dirs, files in os.walk(directory):
+        for file in files:
+            if file.endswith(".log"):
+                log_files.append(os.path.join(root, file))
+    return log_files
+
 # 主函数
 def main():
     
-    log_files = [os.path.join(LOG_DIR, f) for f in os.listdir(LOG_DIR) if f.endswith(".log")]
+    log_files = find_log_files(LOG_DIR)
     if not log_files:
-        print("No log files found in logs/")
+        print("No log files found in logs/ and its subdirectories")
         return
+    
+    print(f"Found {len(log_files)} log files:")
+    for log_file in log_files:
+        print(f"  - {log_file}")
+    
     for log_file in log_files:
         epochs, train_loss, val_loss, f1, train_acc, val_acc = parse_log(log_file)
         if epochs:
