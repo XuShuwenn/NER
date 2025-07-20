@@ -262,6 +262,7 @@ def load_and_preprocess_data(
         if model_name_or_path == "bert-base-cased" and lang != "en":
             # 如果使用默认英文模型但语言不是英文，自动选择合适的模型
             model_name_or_path = get_bert_model_for_language(lang)
+        print(f"Using tokenizer for model: {model_name_or_path}")
         tokenizer = AutoTokenizer.from_pretrained(model_name_or_path)
         vocab = None  # BERT uses its own vocabulary
     else:

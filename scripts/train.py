@@ -142,6 +142,29 @@ def main():
             num_labels=len(label_names)
         )
         model = model.to(device)
+        
+        # 计算类别权重来处理数据不平衡
+        label_counts = {}
+        for split_name, split_dataset in datasets.items():
+            if split_name == "train":
+                for i in range(len(split_dataset)):
+                    sample = split_dataset[i]
+                    labels = sample["labels"]
+                    for label in labels:
+                        if label != -100:  # 忽略padding标签
+                            label_counts[label] = label_counts.get(label, 0) + 1
+        
+        # 计算权重：少数类别获得更高权重
+        total_samples = sum(label_counts.values())
+        class_weights = torch.ones(len(label_names))
+        for label_id, count in label_counts.items():
+            if count > 0:
+                class_weights[label_id] = total_samples / (len(label_counts) * count)
+        
+        # 将权重移到设备上
+        class_weights = class_weights.to(device)
+        logger.info(f"Class weights: {class_weights.tolist()}")
+        
         optimizer = AdamW(
             model.parameters(), 
             lr=args.learning_rate, 
@@ -173,7 +196,10 @@ def main():
                 predictions = model(input_ids, labels=None, mask=mask)
             else:
                 outputs = model(input_ids=input_ids, attention_mask=mask, labels=labels)
-                loss = outputs.loss
+                # 使用类别权重的损失函数
+                logits = outputs.logits
+                loss_fct = torch.nn.CrossEntropyLoss(weight=class_weights, ignore_index=-100)
+                loss = loss_fct(logits.view(-1, len(label_names)), labels.view(-1))
                 predictions = outputs.logits.argmax(dim=-1)
             
             # 计算acc

@@ -19,7 +19,7 @@ SUPPORTED_LANGUAGES = {
         "tokenizer": "jieba",  # jieba分词
         "bert_model": "bert-base-chinese",  # 使用专门的中文BERT模型
         "datasets": ["wikiann", "conll2012_ontonotesv5"],
-        "wikiann_config": "chinese_v4",  # WikiAnn数据集配置
+        "wikiann_config": "zh",  # WikiAnn数据集配置
         "conll2012_config": "chinese_v4"  # conll2012_ontonotesv5数据集配置
     }
 }
